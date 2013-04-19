@@ -1,12 +1,15 @@
 package edu.amherst.HW3;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
 class Square extends JPanel {
 	
-	int value = 2;
+	Boolean set = false;
+	int value;
 	Board board;
 	JLabel label;
 
@@ -33,12 +36,20 @@ class Square extends JPanel {
 	
 	class Listener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
-			if (value == 2) {
-				if (board.playground.current_player) value = 0;
-				else value = 1;
+			if (!set && board.playground.enabled) {
+				if (board.playground.current_player) {
+					value = 0;
+					board.playground.setBorder(new LineBorder(Color.BLUE, board.LINE_WIDTH));
+					board.playground.setBackground(Color.BLUE);
+				}
+				else {
+					value = 1;
+					board.playground.setBorder(new LineBorder(Color.RED, board.LINE_WIDTH));
+					board.playground.setBackground(Color.RED);
+				}
+				set = true;
 				updateLabel();
-				board.playground.updateLabel();
-				System.out.println(board.checkWin());
+				board.playground.updateLabel();			
 				board.playground.current_player = !board.playground.current_player;
 			}
 		}

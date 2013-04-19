@@ -19,12 +19,11 @@ class Board extends JPanel {
 		playground = (PlayGround) parent;
 		setLayout (new GridLayout(ROWS, COLUMNS, LINE_WIDTH, LINE_WIDTH));
 		
-		for(Square[] s : squares) { // init squares
-			for (Square a : s) {
-				a = new Square(SQUARE_SIZE, this);
-				add(a);
+		for (int r = 0; r < ROWS; r++)
+			for (int c = 0; c < COLUMNS; c++){
+				squares[r][c] = new Square(SQUARE_SIZE, this);
+				add(squares[r][c]);
 			}
-		}
 		
 		border = new LineBorder(Color.BLACK, LINE_WIDTH);
 		setBorder(border);
@@ -33,21 +32,31 @@ class Board extends JPanel {
 	
 	public Boolean checkWin() {
 		for(int i = 0; i<ROWS; i++){
-			if(squares[i][1]==squares[i][0]&&squares[i][1]==squares[i][2]){
-				return true;
-			}
+			if (squares[i][0].set && squares[i][1].set && squares[i][2].set)
+				if(squares[i][1].value==squares[i][0].value&&squares[i][1].value==squares[i][2].value){
+					return true;
+				}
 		}
 		for(int j = 0; j<COLUMNS; j++){
-			if(squares[1][j]==squares[0][j]&&squares[1][j]==squares[2][j]){
+			if (squares[0][j].set && squares[1][j].set && squares[2][j].set)
+			if(squares[1][j].value==squares[0][j].value&&squares[1][j].value==squares[2][j].value){
 				return true;
 			}
 		}
-		if(squares[1][1]==squares[0][0]&&squares[1][1]==squares[2][2]) return true;
-		if(squares[1][1]==squares[0][2]&&squares[1][1]==squares[2][0]) return true;
+		
+		if (squares[0][0].set && squares[1][1].set && squares[2][2].set)
+			if(squares[1][1].value==squares[0][0].value&&squares[1][1].value==squares[2][2].value) return true;
+		
+		if (squares[2][0].set && squares[1][1].set && squares[0][2].set)
+			if(squares[1][1].value==squares[0][2].value&&squares[1][1].value==squares[2][0].value) return true;
+		
 		return false;
 	}
 	
 	public Boolean checkFull() {
-		return false;
+		for (int r = 0; r < ROWS; r++)
+			for (int c = 0; c < COLUMNS; c++)
+				if (!squares[r][c].set) return false;
+		return true;
 	}
 }
